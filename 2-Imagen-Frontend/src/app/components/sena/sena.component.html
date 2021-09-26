@@ -1,0 +1,84 @@
+
+<div>
+    <form [formGroup]="environmentForm" class="form-container form-border ">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Capture environment value</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="col-md-6">
+                    <mat-form-field class="full-width">
+                        <input  formControlName="environmentInput" matInput placeholder="Environment value">
+                    </mat-form-field>
+                    <p> Value: {{environmentData}}</p>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button (click)="onSubmitEnv()" mat-raised-button color="primary">Get Environment variable</button>
+            </mat-card-actions>
+        </mat-card>
+    
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="timeForm" class="form-container form-border">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Set time value</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="col-md-6">
+                    <p> Date: {{timeDataSet.date}}</p>
+                    <p> Number: {{timeDataSet.number}}</p>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button (click)="onSubmitSetTime()" mat-raised-button color="primary">Set time data</button>
+            </mat-card-actions>
+        </mat-card>
+    
+    </form>
+</div>
+
+
+<div>
+    <form [formGroup]="timeForm" class="form-container form-border">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Capture time value</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="col-md-6">
+                    <p> Date: {{timeData.date}}</p>
+                    <p> Number: {{timeData.number}}</p>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button (click)="onSubmitGetTime()" mat-raised-button color="primary">Get time data</button>
+            </mat-card-actions>
+        </mat-card>
+    
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="timeAllForm" class="form-container form-border">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Capture all time values</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+                <div *ngFor='let timeDataL of timeDataList;' class="col-md-6">
+                    <p> Date: {{timeDataL.date}}</p>
+                    <p> Number: {{timeDataL.number}}</p>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button (click)="onSubmitTimeAll()" mat-raised-button color="primary">Get time data</button>
+            </mat-card-actions>
+        </mat-card>
+    
+    </form>
+</div>

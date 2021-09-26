@@ -1,0 +1,129 @@
+---
+# Deploy de ms-sena
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-sena-deploy
+  labels:
+    app: ms-sena
+spec:
+  selector:
+    matchLabels:
+      app: ms-sena
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ms-sena
+    spec:
+      containers:
+        - name: ms-sena
+          image: acjimeneza/ms-sena:2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+            - name: configuration-from-cm
+              mountPath: app/Configuration/appsettings.Development.json
+              subPath: appsettings.Development.json
+      volumes:
+        - name: configuration-from-cm
+          configMap:
+            name: base-configmap
+            items:
+              - key: "appsettings.Development.json"
+                path: "appsettings.Development.json"
+
+---
+# Servicio para el deploy de ms-sena
+apiVersion: v1
+kind: Service
+metadata:
+  name: base-service
+  labels:
+    app: ms-sena
+spec:
+  type: LoadBalancer
+  selector:
+    app: ms-sena
+  ports:
+    - protocol: TCP
+      name: http
+      port: 8000
+      targetPort: 5000
+
+---
+# Deploy de MYSql
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deploy
+  labels:
+    app: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: acjimeneza/mysql:1
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "1234"
+            - name: MYSQL_USER
+              value: admin
+            - name: MYSQL_PASSWORD
+              value: "1234"
+            - name: MYSQL_DATABASE
+              value: Timedb
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3306
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "400m"
+
+---
+# Servicio para el deploy de MYSql
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    app: mysql
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      name: http
+      port: 3306
+      targetPort: 3306

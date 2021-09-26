@@ -1,0 +1,20 @@
+# Configuración mySQL
+
+---
+# Configuración por fichero .Net
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: base-configmap
+data:
+  # Parámetros en forma LLAVE: VALOR
+  MYSQL_ROOT_PASSWORD: "1234"
+  MYSQL_USER: admin
+  MYSQL_PASSWORD: "1234"
+  MYSQL_DATABASE: Timedb
+
+  # Manejo de ficheros
+  appsettings.Development.json: |
+    {
+    "MYSQL_CONNECTION_STRING": "server=mysql-service; user=admin; password=1234; port=3306; database=Timedb"
+    }
